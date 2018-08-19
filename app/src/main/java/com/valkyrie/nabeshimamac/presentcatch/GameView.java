@@ -15,7 +15,7 @@ import java.util.Random;
 /**
  * Created by NabeshimaMAC on 16/04/26.
  */
-public class GameView extends SurfaceView implements SurfaceHolder.Callback ,Runnable{
+public class GameView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
     Bitmap presentImage;
 
     int score = 0;
@@ -29,13 +29,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback ,Run
 
     Present present;
 
-    int screenWidth , screenHeight;
+    int screenWidth, screenHeight;
 
     Player player;
     Bitmap playerImage;
 
 
-    public GameView(Context context){
+    public GameView(Context context) {
         super(context);
         getHolder().addCallback(this);
 
@@ -51,7 +51,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback ,Run
 
         Canvas canvas = holder.lockCanvas();
         canvas.drawColor(Color.WHITE);
-        canvas.drawBitmap(presentImage,100,200,null);
+        canvas.drawBitmap(presentImage, 100, 200, null);
         holder.unlockCanvasAndPost(canvas);
 
         surfaceHolder = holder;
@@ -75,21 +75,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback ,Run
 
     }
 
-    class Present{
+    class Present {
         private static final int WIDTH = 100;
         private static final int HEIGHT = 100;
 
-        float x,y;
-        public Present(){
+        float x, y;
+
+        public Present() {
             Random random = new Random();
             x = random.nextInt(screenWidth - WIDTH);
             y = 0;
         }
-        public void update(){
+
+        public void update() {
             y += 15.0f;
         }
 
-        public void reset(){
+        public void reset() {
             Random random = new Random();
             x = random.nextInt(screenWidth - WIDTH);
             y = 0;
@@ -98,7 +100,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback ,Run
 
 
     @Override
-    public void run(){
+    public void run() {
         present = new Present();
         player = new Player();
 
@@ -107,21 +109,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback ,Run
         textPaint.setFakeBoldText(true);
         textPaint.setTextSize(100);
 
-        while (thread != null){
+        while (thread != null) {
             Canvas canvas = surfaceHolder.lockCanvas();
             canvas.drawColor(Color.WHITE);
-            canvas.drawBitmap(playerImage, player.x,player.y,null);
+            canvas.drawBitmap(playerImage, player.x, player.y, null);
 
-            canvas.drawBitmap(presentImage,present.x, present.y, null);
+            canvas.drawBitmap(presentImage, present.x, present.y, null);
 
 
-            if(player.isEnter(present)){
+            if (player.isEnter(present)) {
                 present.reset();
                 score += 10;
-            }else if (present.y > screenHeight){
+            } else if (present.y > screenHeight) {
                 present.reset();
                 life--;
-            }else {
+            } else {
                 present.update();
             }
             present.update();
@@ -133,44 +135,42 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback ,Run
 
             try {
                 Thread.sleep(FRAME_TIME);
-            }catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            if(life <= 0){
+            if (life <= 0) {
                 canvas.drawText("Game Over", screenWidth / 3, screenHeight / 2, textPaint);
                 surfaceHolder.unlockCanvasAndPost(canvas);
                 break;
             }
 
 
-
-
         }
 
     }
 
-    class Player{
+    class Player {
         final int WIDTH = 200;
         final int HEIGHT = 200;
 
-        float x , y;
+        float x, y;
 
-        public Player(){
+        public Player() {
             x = 0;
             y = screenHeight - HEIGHT;
         }
 
-        public void move(float diffX){
+        public void move(float diffX) {
             this.x += diffX;
-            this.x = Math.max(0,x);
+            this.x = Math.max(0, x);
             this.x = Math.min(screenWidth - WIDTH, x);
 
         }
 
-        public boolean isEnter(Present present){
-            if(present.x + Present.WIDTH > x && present.x < x + WIDTH &&
-                    present.y + Present.HEIGHT > y && present.y < y + HEIGHT){
+        public boolean isEnter(Present present) {
+            if (present.x + Present.WIDTH > x && present.x < x + WIDTH &&
+                    present.y + Present.HEIGHT > y && present.y < y + HEIGHT) {
                 return true;
             }
             return false;
