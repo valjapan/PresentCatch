@@ -15,6 +15,7 @@ import java.util.Random;
 /**
  * Created by NabeshimaMAC on 16/04/26.
  */
+
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
     Bitmap presentImage;
 
@@ -128,7 +129,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
             }
             present.update();
 
-            surfaceHolder.unlockCanvasAndPost(canvas);
 
             canvas.drawText("SCORE :" + score, 50, 150, textPaint);
             canvas.drawText("LIFE :" + life, 50, 300, textPaint);
@@ -143,9 +143,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
                 canvas.drawText("Game Over", screenWidth / 3, screenHeight / 2, textPaint);
                 surfaceHolder.unlockCanvasAndPost(canvas);
                 break;
+
             }
-
-
+            surfaceHolder.unlockCanvasAndPost(canvas);
         }
 
     }
